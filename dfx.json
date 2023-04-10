@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "macome_backend": {
+      "main": "src/macome_backend/main.mo",
+      "type": "motoko"
+    },
+    "macome_frontend": {
+      "dependencies": [
+        "macome_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/macome_frontend/src/index.html"
+      },
+      "source": [
+        "src/macome_frontend/assets",
+        "dist/macome_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
