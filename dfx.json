@@ -4,6 +4,14 @@
       "main": "src/macome_backend/main.mo",
       "type": "motoko"
     },
+    "db1": {
+      "main": "src/macome_backend/db/main.mo",
+      "type": "motoko"
+    },
+    "db2": {
+      "main": "src/macome_backend/db/main.mo",
+      "type": "motoko"
+    },
     "macome_frontend": {
       "dependencies": [
         "macome_backend"

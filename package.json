@@ -2,7 +2,12 @@
   "name": "macome_frontend",
   "version": "0.1.0",
   "description": "Internet Computer starter application",
-  "keywords": ["Internet Computer", "Motoko", "JavaScript", "Canister"],
+  "keywords": [
+    "Internet Computer",
+    "Motoko",
+    "JavaScript",
+    "Canister"
+  ],
   "scripts": {
     "build": "webpack",
     "prebuild": "npm run generate",
@@ -11,9 +16,11 @@
     "generate": "dfx generate macome_backend"
   },
   "devDependencies": {
-    "@dfinity/agent": "0.15.5",
-    "@dfinity/candid": "0.15.5",
-    "@dfinity/principal": "0.15.5",
+    "@dfinity/agent": "^0.15.4",
+    "@dfinity/auth-client": "^0.15.4",
+    "@dfinity/candid": "^0.15.4",
+    "@dfinity/identity": "^0.15.4",
+    "@dfinity/principal": "^0.15.4",
     "assert": "2.0.0",
     "buffer": "6.0.3",
     "copy-webpack-plugin": "^11.0.0",
@@ -22,6 +29,8 @@
     "process": "0.11.10",
     "stream-browserify": "3.0.0",
     "terser-webpack-plugin": "^5.3.3",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
     "util": "0.12.4",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0",
@@ -35,5 +44,9 @@
     "last 2 firefox version",
     "last 2 safari version",
     "last 2 edge version"
-  ]
+  ],
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
