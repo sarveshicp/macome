@@ -5,14 +5,15 @@ import { Principal } from "@dfinity/principal";
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
 
-import { idlFactory } from "./db.did";
+import { idlFactory } from "./asset.did";
 
 
 
 
 const App = () => {
   const db1 = "dcbce-3yaaa-aaaag-qb5vq-cai";
-  const db2 = "sr335-fiaaa-aaaak-qb72a-cai";
+  // const db2 = "sr335-fiaaa-aaaak-qb72a-cai";
+  const asset = "sr335-fiaaa-aaaak-qb72a-cai";
 
   const [connect, setConnect] = useState("");
   const [address, setAddress] = useState("");
@@ -26,6 +27,8 @@ const App = () => {
 
   const [name, setName] = useState("");
   const [file, setFile] = useState([]);
+
+  const [_type, setType] = useState("");
 
   useEffect(() => {
     async function checkConnection() {
@@ -120,33 +123,6 @@ const App = () => {
     return str.split("").reverse().join("");
   }
 
-  //To upload File : Testing
-  const uploadFiles = async () => {
-    if (identity == null) {
-      alert("Connect NFID!");
-      return;
-    }
-    const agent = new HttpAgent({
-      identity: identity,
-      host: "https://ic0.app/",
-    });
-    const actor = Actor.createActor(idlFactory, {
-      agent,
-      canisterId: db1,
-    });
-
-    try {
-      setLoader(true);
-
-      //chunked data is stored in files, call canister methods to upload chunks one by one.
-      setLoader(false);
-    }
-    catch (err) {
-      alert(err);
-      setLoader(false)
-    }
-  };
-
   const b64toArrays = (base64) => {
     let encoded = base64.toString().replace(/^data:(.*,)?/, '');
     if ((encoded.length % 4) > 0) {
@@ -155,8 +131,8 @@ const App = () => {
     setBase64(encoded);
     const byteCharacters = Buffer.from(encoded, 'base64');
     const byteArrays = [];
-    // const sliceSize = 1500000;
-    const sliceSize = 15000;
+    const sliceSize = 1500000;
+    // const sliceSize = 15000;
 
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
       const byteArray = [];
@@ -189,6 +165,55 @@ const App = () => {
     return type;
   };
 
+  //To upload File : Testing
+  const uploadFiles = async () => {
+    if (identity == null) {
+      alert("Connect NFID!");
+      return;
+    }
+    const agent = new HttpAgent({
+      identity: identity,
+      host: "https://ic0.app/",
+    });
+    const actor = Actor.createActor(idlFactory, {
+      agent,
+      canisterId: asset,
+    });
+
+    // const actor2 = Actor.createActor(idlFactory, {
+    //   agent,
+    //   canisterId: db2,
+    // });
+
+    try {
+      setLoader(true);
+      const chunks = [];
+      const res1 = await actor.create_batch();
+      console.log(res1);
+      for (let i = 0; i < file.length; i++) {
+        console.log(file[i]);
+        const _req2 = {
+          content: file[i],
+          batch_id: Number(res1.batch_id),
+        };
+        const res2 = await actor.create_chunk(_req2);
+        console.log(res2);
+        chunks.push(Number(res2.chunk_id));
+      }
+      console.log(chunks);
+      var _name = "/" + name;
+      const etag = Math.random();
+      console.log(_type);
+      await actor.commit_asset_upload(res1.batch_id, String(_name), String(_type), chunks, "identity", etag.toString());
+      console.log("uploaded!");
+      setLoader(false);
+    }
+    catch (err) {
+      alert(err);
+      setLoader(false)
+    }
+  };
+
   const handleUpload = (event) => {
     setReady(false);
     const file = event.target.files[0];
@@ -207,11 +232,12 @@ const App = () => {
       }
       fileArr = b64toArrays(reader.result);
       fileType = b64toType(reader.result);
-      fileName = "macome_file";
+      fileName = file.name;
       console.log(fileName + ' | ' + Math.round(file.size) + ' Bytes');
       console.log(fileArr);
       setFile(fileArr);
       setName(fileName);
+      setType(fileType);
       setReady(true);
     };
     setReady(true);

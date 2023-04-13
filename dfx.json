@@ -12,10 +12,12 @@
       "main": "src/macome_backend/db/main.mo",
       "type": "motoko"
     },
+    "asset": {
+      "main": "src/macome_backend/asset/main.asset.mo",
+      "type": "motoko"
+    },
     "macome_frontend": {
-      "dependencies": [
-        "macome_backend"
-      ],
+      "dependencies": [],
       "frontend": {
         "entrypoint": "src/macome_frontend/src/index.html"
       },

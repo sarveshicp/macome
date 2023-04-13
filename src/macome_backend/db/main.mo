@@ -48,7 +48,7 @@ actor DB {
         chunks := Trie.put(chunks, key(chunkId), Nat32.equal, chunk).0;
     };
 
-    public func get_chunk(chunkId : Nat32, chunk : [Nat8]) : async ([Nat8]){
+    public query func get_chunk(chunkId : Nat32) : async ([Nat8]){
         switch (Trie.find(chunks, key(chunkId), Nat32.equal)){
             case (?c) {
                 return c;

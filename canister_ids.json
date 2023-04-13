@@ -1,11 +1,14 @@
 {
-    "macome_backend": {
-        "ic": ""
-    },
-    "db1": {
+    "macome_frontend": {
         "ic": "dcbce-3yaaa-aaaag-qb5vq-cai"
     },
+    "db1": {
+        "ic": ""
+    },
     "db2": {
+        "ic": ""
+    },
+    "asset": {
         "ic": "sr335-fiaaa-aaaak-qb72a-cai"
     }
 }
