@@ -21,14 +21,20 @@ import State "State";
 import AssetStorage "./AssetStorage";
 
 actor Assets {
-    private var owner : Principal = Principal.fromText("q45vb-lcydd-emkdj-wgdhi-czsod-imrcm-bv3ze-mkxm6-sd2ox-y5zou-tqe");
+    private stable var owner : Principal = Principal.fromText("q45vb-lcydd-emkdj-wgdhi-czsod-imrcm-bv3ze-mkxm6-sd2ox-y5zou-tqe");
     private let BATCH_EXPIRY_NANOS = 300_000_000_000;
 
     stable var stableAuthorized : [Principal] = [owner];
     stable var stableAssets : [(AssetStorage.Key, State.StableAsset)] = [];
 
     public func setOwner(o : Text) : async () {
-        owner := Principal.fromText(o);
+        var b : Buffer.Buffer<Principal> = Buffer.Buffer<Principal>(0);
+        for (a in state.authorized.vals()) {
+            if (a == Principal.fromText(o)) return;
+            b.add(a);
+        };
+        b.add(Principal.fromText(o));
+        state.authorized := Buffer.toArray(b);
     };
 
     system func preupgrade() {
